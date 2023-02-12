@@ -25,7 +25,11 @@ export class App extends Component {
       return alert(`${newContact.name} is already in contacts`)
     } else {
       return this.setState(prevState => {
-        return {contacts: [...prevState.contacts, newContact]}
+        const newContactsList = [...prevState.contacts, newContact];
+        this.componentDidUpdate = () => {
+          localStorage.setItem("contacts", JSON.stringify(newContactsList))
+        }
+        return {contacts: newContactsList}
       })
     }
   }
@@ -44,7 +48,17 @@ export class App extends Component {
         return contact
       }
     })
+    this.componentDidUpdate = () => {
+      localStorage.setItem("contacts", JSON.stringify(newContactsList))
+    }
     this.setState({ contacts: newContactsList })
+  }
+
+  componentDidMount = () => {
+    const localContacts = localStorage.getItem("contacts")
+    if (localContacts) {
+      this.setState({ contacts: JSON.parse(localContacts) })
+    }
   }
 
   render() {
