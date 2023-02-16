@@ -20,18 +20,10 @@ export class App extends Component {
         return (contact.name === newContact.name)
       })
     }
-
     if (isExist()) {
       return alert(`${newContact.name} is already in contacts`)
-    } else {
-      return this.setState(prevState => {
-        const newContactsList = [...prevState.contacts, newContact];
-        this.componentDidUpdate = () => {
-          localStorage.setItem("contacts", JSON.stringify(newContactsList))
-        }
-        return {contacts: newContactsList}
-      })
     }
+    return this.setState(prevState => ({ contacts: [...prevState.contacts, newContact] }))
   }
 
   filterContacts = (event) => {
@@ -48,10 +40,11 @@ export class App extends Component {
         return contact
       }
     })
-    this.componentDidUpdate = () => {
-      localStorage.setItem("contacts", JSON.stringify(newContactsList))
-    }
     this.setState({ contacts: newContactsList })
+  }
+
+  componentDidUpdate = () => {
+    localStorage.setItem("contacts", JSON.stringify(this.state.contacts))
   }
 
   componentDidMount = () => {
