@@ -34,17 +34,16 @@ export class App extends Component {
     const contactToDel = event.currentTarget.name;
     const stateContacts = this.state.contacts;
     const newContactsList = stateContacts.filter(contact => {
-      if (contact.name === contactToDel) {
-        return false
-      } else {
-        return contact
-      }
+      return contact.name !== contactToDel && contact
     })
     this.setState({ contacts: newContactsList })
   }
 
-  componentDidUpdate = () => {
-    localStorage.setItem("contacts", JSON.stringify(this.state.contacts))
+  componentDidUpdate = (prevProps, prevState) => {
+    if(this.state.contacts !== prevState.contacts){
+      console.log(this.state.contacts, '!==', prevState.contacts);
+      localStorage.setItem("contacts", JSON.stringify(this.state.contacts))
+    }
   }
 
   componentDidMount = () => {
